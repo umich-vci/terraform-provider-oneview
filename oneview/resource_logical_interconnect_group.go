@@ -415,6 +415,16 @@ func resourceLogicalInterconnectGroup() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
+			"stacking_mode": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "None",
+			},
+			"enclosure_type": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "SY12000",
+			},
 			"modified": {
 				Type:     schema.TypeString,
 				Computed: true,
@@ -455,8 +465,10 @@ func resourceLogicalInterconnectGroupCreate(d *schema.ResourceData, meta interfa
 	config := meta.(*Config)
 
 	lig := ov.LogicalInterconnectGroup{
-		Name: d.Get("name").(string),
-		Type: d.Get("type").(string),
+		Name:          d.Get("name").(string),
+		Type:          d.Get("type").(string),
+		StackingMode:  d.Get("stacking_mode").(string),
+		EnclosureType: d.Get("enclosure_type").(string),
 	}
 
 	if val, ok := d.GetOk("interconnect_bay_set"); ok {
@@ -839,6 +851,8 @@ func resourceLogicalInterconnectGroupRead(d *schema.ResourceData, meta interface
 	d.Set("category", logicalInterconnectGroup.Category)
 	d.Set("state", logicalInterconnectGroup.State)
 	d.Set("fabric_uri", logicalInterconnectGroup.FabricUri.String())
+	d.Set("stacking_mode", logicalInterconnectGroup.StackingMode)
+	d.Set("enclosure_type", logicalInterconnectGroup.EnclosureType)
 	d.Set("eTag", logicalInterconnectGroup.ETAG)
 	d.Set("description", logicalInterconnectGroup.Description)
 	d.Set("interconnect_settings.0.igmp_snooping", logicalInterconnectGroup.EthernetSettings.EnableIgmpSnooping)
@@ -1064,7 +1078,7 @@ func resourceLogicalInterconnectGroupRead(d *schema.ResourceData, meta interface
 
 	interconnectSettings := make([]map[string]interface{}, 0, 1)
 	interconnectSettings = append(interconnectSettings, map[string]interface{}{
-		"type": logicalInterconnectGroup.EthernetSettings.Type,
+		"type":                    logicalInterconnectGroup.EthernetSettings.Type,
 		"fast_mac_cache_failover": *logicalInterconnectGroup.EthernetSettings.EnableFastMacCacheFailover,
 		"igmp_snooping":           *logicalInterconnectGroup.EthernetSettings.EnableIgmpSnooping,
 		"network_loop_protection": *logicalInterconnectGroup.EthernetSettings.EnableNetworkLoopProtection,
@@ -1116,7 +1130,7 @@ func resourceLogicalInterconnectGroupRead(d *schema.ResourceData, meta interface
 
 	qualityOfService := make([]map[string]interface{}, 0, 1)
 	qualityOfService = append(qualityOfService, map[string]interface{}{
-		"type": logicalInterconnectGroup.QosConfiguration.Type,
+		"type":                         logicalInterconnectGroup.QosConfiguration.Type,
 		"active_qos_config_type":       logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.Type,
 		"config_type":                  logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.ConfigType,
 		"uplink_classification_type":   logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.UplinkClassificationType,
@@ -1143,9 +1157,11 @@ func resourceLogicalInterconnectGroupUpdate(d *schema.ResourceData, meta interfa
 	config := meta.(*Config)
 
 	lig := ov.LogicalInterconnectGroup{
-		Name: d.Get("name").(string),
-		Type: d.Get("type").(string),
-		URI:  utils.NewNstring(d.Get("uri").(string)),
+		Name:          d.Get("name").(string),
+		Type:          d.Get("type").(string),
+		StackingMode:  d.Get("stacking_mode").(string),
+		EnclosureType: d.Get("enclosure_type").(string),
+		URI:           utils.NewNstring(d.Get("uri").(string)),
 	}
 
 	if val, ok := d.GetOk("interconnect_bay_set"); ok {
