@@ -14,7 +14,7 @@ package oneview
 import (
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func resourceNetworkSet() *schema.Resource {
@@ -184,13 +184,13 @@ func resourceNetworkSetUpdate(d *schema.ResourceData, meta interface{}) error {
 		netUris[i] = utils.NewNstring(raw.(string))
 	}
 	newNetSet := ov.NetworkSet{
-		ETAG: d.Get("eTag").(string),
-		URI:  utils.NewNstring(d.Get("uri").(string)),
-		Name: d.Get("name").(string),
+		ETAG:                  d.Get("eTag").(string),
+		URI:                   utils.NewNstring(d.Get("uri").(string)),
+		Name:                  d.Get("name").(string),
 		ConnectionTemplateUri: utils.NewNstring(d.Get("connection_template_uri").(string)),
-		Type:             d.Get("type").(string),
-		NativeNetworkUri: utils.NewNstring(d.Get("native_network_uri").(string)),
-		NetworkUris:      netUris,
+		Type:                  d.Get("type").(string),
+		NativeNetworkUri:      utils.NewNstring(d.Get("native_network_uri").(string)),
+		NetworkUris:           netUris,
 	}
 
 	err := config.ovClient.UpdateNetworkSet(newNetSet)

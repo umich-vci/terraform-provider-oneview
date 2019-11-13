@@ -18,7 +18,7 @@ import (
 
 	"github.com/HewlettPackard/oneview-golang/ov"
 	"github.com/HewlettPackard/oneview-golang/utils"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 func resourceLogicalInterconnectGroup() *schema.Resource {
@@ -1064,7 +1064,7 @@ func resourceLogicalInterconnectGroupRead(d *schema.ResourceData, meta interface
 
 	interconnectSettings := make([]map[string]interface{}, 0, 1)
 	interconnectSettings = append(interconnectSettings, map[string]interface{}{
-		"type": logicalInterconnectGroup.EthernetSettings.Type,
+		"type":                    logicalInterconnectGroup.EthernetSettings.Type,
 		"fast_mac_cache_failover": *logicalInterconnectGroup.EthernetSettings.EnableFastMacCacheFailover,
 		"igmp_snooping":           *logicalInterconnectGroup.EthernetSettings.EnableIgmpSnooping,
 		"network_loop_protection": *logicalInterconnectGroup.EthernetSettings.EnableNetworkLoopProtection,
@@ -1116,7 +1116,7 @@ func resourceLogicalInterconnectGroupRead(d *schema.ResourceData, meta interface
 
 	qualityOfService := make([]map[string]interface{}, 0, 1)
 	qualityOfService = append(qualityOfService, map[string]interface{}{
-		"type": logicalInterconnectGroup.QosConfiguration.Type,
+		"type":                         logicalInterconnectGroup.QosConfiguration.Type,
 		"active_qos_config_type":       logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.Type,
 		"config_type":                  logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.ConfigType,
 		"uplink_classification_type":   logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.UplinkClassificationType,

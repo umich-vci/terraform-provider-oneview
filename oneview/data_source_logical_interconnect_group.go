@@ -13,7 +13,7 @@ package oneview
 
 import (
 	"fmt"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"strconv"
 )
 
@@ -650,7 +650,7 @@ func dataSourceLogicalInterconnectGroupRead(d *schema.ResourceData, meta interfa
 
 	interconnectSettings := make([]map[string]interface{}, 0, 1)
 	interconnectSettings = append(interconnectSettings, map[string]interface{}{
-		"type": logicalInterconnectGroup.EthernetSettings.Type,
+		"type":                    logicalInterconnectGroup.EthernetSettings.Type,
 		"fast_mac_cache_failover": *logicalInterconnectGroup.EthernetSettings.EnableFastMacCacheFailover,
 		"igmp_snooping":           *logicalInterconnectGroup.EthernetSettings.EnableIgmpSnooping,
 		"network_loop_protection": *logicalInterconnectGroup.EthernetSettings.EnableNetworkLoopProtection,
@@ -702,7 +702,7 @@ func dataSourceLogicalInterconnectGroupRead(d *schema.ResourceData, meta interfa
 
 	qualityOfService := make([]map[string]interface{}, 0, 1)
 	qualityOfService = append(qualityOfService, map[string]interface{}{
-		"type": logicalInterconnectGroup.QosConfiguration.Type,
+		"type":                         logicalInterconnectGroup.QosConfiguration.Type,
 		"active_qos_config_type":       logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.Type,
 		"config_type":                  logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.ConfigType,
 		"uplink_classification_type":   logicalInterconnectGroup.QosConfiguration.ActiveQosConfig.UplinkClassificationType,
